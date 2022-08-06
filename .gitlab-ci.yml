@@ -3,5 +3,5 @@ grade:
   script:
     - echo $CI_PROJECT_DIR
     - echo $CI_COMMIT_REF_NAME
-    - cargo test --manifest-path "/opt/workspace/problems/add/Cargo.toml"
+    - cargo test --manifest-path "/opt/workspace/problems/tutorial/add/Cargo.toml"
   timeout: 3 minutes
