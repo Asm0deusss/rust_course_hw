@@ -3,5 +3,10 @@ grade:
   script:
     - echo $CI_PROJECT_DIR
     - echo $CI_COMMIT_REF_NAME
+    - echo before
+    - cat /opt/workspace/problems/tutorial/add/src/lib.rs
+    - cp -rf $CI_PROJECT_DIR/problems/tutorial/add/src/* /opt/workspace/problems/tutorial/add/src/
+    - echo after
+    - cat /opt/workspace/problems/tutorial/add/src/lib.rs
     - cargo test --manifest-path "/opt/workspace/problems/tutorial/add/Cargo.toml"
   timeout: 3 minutes
