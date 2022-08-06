@@ -1,4 +1,5 @@
 grade:
+  image: registry.gitlab.com/rust-hse-tasks/rust-hse
   script:
     - echo $CI_PROJECT_DIR
     - echo $CI_COMMIT_REF_NAME
