@@ -1,6 +1,6 @@
 # rust-hse
 
-Update 1
+Update 2
 
 ## Getting started
 
