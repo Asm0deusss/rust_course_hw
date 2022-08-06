@@ -1,0 +1,6 @@
+grade:
+  script:
+    - echo $CI_PROJECT_DIR
+    - echo $CI_COMMIT_REF_NAME
+    - cargo test --manifest-path "/opt/hse/rust-hse/problems/add/Cargo.toml"
+  timeout: 3 minutes
