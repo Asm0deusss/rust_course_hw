@@ -1,6 +1,7 @@
-- group:    Tutorial
-  start:    01-08-2022 00:00
-  deadline: 11-08-2022 23:59
+- group: Tutorial
+  start: 01-08-2022 00:00
+  deadline: 31-12-2022 23:59
+  dir: tutorial
   tasks:
     - task: add
-      score: 0
+      score: 100
