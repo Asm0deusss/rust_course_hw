@@ -1,12 +1,7 @@
 grade:
-  image: registry.gitlab.com/rust-hse-tasks/rust-hse
+  image: cr.yandex/crpn2tbct0clis87o7vk/ci-image
   script:
-    - echo $CI_PROJECT_DIR
     - echo $CI_COMMIT_REF_NAME
-    - echo before
-    - cat /opt/workspace/problems/tutorial/add/src/lib.rs
-    - cp -rf $CI_PROJECT_DIR/problems/tutorial/add/src/* /opt/workspace/problems/tutorial/add/src/
-    - echo after
-    - cat /opt/workspace/problems/tutorial/add/src/lib.rs
-    - cargo test --manifest-path "/opt/workspace/problems/tutorial/add/Cargo.toml"
+    - echo $CI_PROJECT_DIR
+    - rover test --path "/opt/workspace/problems/$CI_COMMIT_REF_NAME" --move-files "$CI_PROJECT_DIR"
   timeout: 3 minutes
