@@ -1,7 +1,5 @@
 grade:
   image: cr.yandex/crpn2tbct0clis87o7vk/ci-image
   script:
-    - echo $CI_COMMIT_REF_NAME
-    - echo $CI_PROJECT_DIR
-    - rover test --path "/opt/workspace/problems/$CI_COMMIT_REF_NAME" --move-files "$CI_PROJECT_DIR"
+    - rover test --path "/opt/workspace/rust-hse/problems/$CI_COMMIT_REF_NAME" --move-files "$CI_PROJECT_DIR"
   timeout: 3 minutes
