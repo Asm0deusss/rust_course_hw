@@ -1,5 +1,6 @@
 # Rust build
 /target
+/tools/target
 /Cargo.lock
 
 # Sandbox
