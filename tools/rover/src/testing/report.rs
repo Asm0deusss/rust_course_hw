@@ -1,8 +1,8 @@
 use anyhow::{bail, Context, Result};
-use reqwest::blocking::{multipart::Form, Client};
-use std::{env, thread, time};
+use reqwest::{blocking::{multipart::Form, Client}, StatusCode};
+use std::{env, thread, time, io::Read};
 
-const MANYTASK_URL: &str = "https://localhost:5050/api/report";
+const MANYTASK_URL: &str = "https://rust-hse.ru/api/report";
 const MANYTASK_RETRIES: usize = 3;
 
 pub enum ReportType {
@@ -49,17 +49,20 @@ impl ReportType {
                     if failed {
                         data = data.text("failed", "1");
                     }
-                    if client
+                    let mut response = client
                         .post(MANYTASK_URL)
                         .multipart(data)
                         .send()
-                        .context("post report to manytask")?
-                        .status()
-                        != 500
-                    {
+                        .context("post report to manytask")?;
+                    let mut body = String::new();
+                    response.read_to_string(&mut body)?;
+                    if response.status().is_success() {
                         return Ok(());
-                    } else {
+                    } else if response.status().is_server_error() {
+                        eprintln!("Server error:\n{response:?}\nContent: {body:?}");
                         thread::sleep(time::Duration::from_millis(1000));
+                    } else {
+                        bail!("Some error happened while reporting results:\n{response:?}\nContent: {body:?}");
                     }
                 }
                 bail!("{MANYTASK_RETRIES} posts to manytask gave 500 code")
