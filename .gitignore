@@ -3,14 +3,8 @@
 /tools/target
 /Cargo.lock
 
-# Sandbox
-/tools/sandbox
-
 # VS Code settings
 **/.vscode
 
 # MacOS useless DS_Store
 **/.DS_Store
-
-# Problem specific
-/problems/async/babencoin/test_artifacts

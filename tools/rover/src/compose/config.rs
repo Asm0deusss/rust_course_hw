@@ -10,7 +10,8 @@ use std::{
 pub struct Config {
     problems: Vec<PathBuf>,
     tools: Vec<PathBuf>,
-    copy: Vec<PathBuf>,
+    #[serde(with = "tuple_vec_map")]
+    copy: Vec<(PathBuf, PathBuf)>,
     skip_entries: Vec<PathBuf>,
     add_to_toml: Vec<PathBuf>,
     do_not_delete: Vec<PathBuf>,
@@ -36,7 +37,7 @@ impl Config {
         self.tools.as_slice()
     }
 
-    pub fn get_copy(&self) -> &[PathBuf] {
+    pub fn get_copy(&self) -> &[(PathBuf, PathBuf)] {
         self.copy.as_slice()
     }
 
