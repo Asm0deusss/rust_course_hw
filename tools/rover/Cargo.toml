@@ -4,6 +4,10 @@ version = "0.2.0"
 authors = ["Alexander Stanovoy <alex.stanovoy@gmail.com>"]
 edition = "2021"
 
+[features]
+default = ["check-version"]
+check-version = []
+
 [dependencies]
 anyhow = ">= 1.0.53"
 cargo_toml = "0.11"

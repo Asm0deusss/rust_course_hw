@@ -3,7 +3,7 @@ use anyhow::{bail, Context, Result};
 use std::{
     fs::File,
     io::{BufRead, BufReader},
-    process,
+    process, collections::HashMap,
 };
 
 const FORBID_UNSAFE_LINE: &str = "#![forbid(unsafe_code)]";
@@ -19,6 +19,13 @@ const FORBID_COLLECTIONS_PATTERNS: [&str; 8] = [
     "BinaryHeap",
 ];
 
+fn filtered_env() -> HashMap<String, String> {
+    std::env::vars().filter(|&(ref k, _)|
+        k == "PATH" || k == "CARGO" || k.starts_with("CARGO_") ||
+        k.starts_with("RUST_") || k.starts_with("RUSTUP_")
+    ).collect()
+}
+
 macro_rules! launch {
     ($toolchain: expr, $command: expr, $context: expr) => {{
         let toolchain_shell_line = $toolchain.get_shell_line()?;
@@ -28,7 +35,10 @@ macro_rules! launch {
         let mut iter = toolchain_shell_iter.chain(command_shell_iter);
         let mut cmd = if let Some(program) = iter.next() {
             let mut cmd = process::Command::new(program);
-            cmd.current_dir($context.get_workdir());
+            cmd
+                .current_dir($context.get_workdir())
+                .env_clear()
+                .envs(filtered_env());
             cmd
         } else {
             bail!("toolchain and command are empty")

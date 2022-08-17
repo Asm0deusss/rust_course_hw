@@ -2,10 +2,12 @@ use anyhow::Result;
 use clap::{Arg, Command};
 use compose::run_compose::run_compose;
 use repository::repo::Repository;
-use util::check_version::ensure_version_is_latest;
 use std::path::PathBuf;
 use submitting::submit::submit_problem;
 use testing::{report::ReportType, test::test_problem};
+
+#[cfg(feature = "check-version")]
+use util::check_version::ensure_version_is_latest;
 
 mod compose;
 mod repository;
@@ -99,13 +101,19 @@ fn main() -> Result<()> {
     match matches.subcommand() {
         Some(("submit", submit_matches)) => {
             let path: PathBuf = submit_matches.value_of("path").unwrap().into();
+
+            #[cfg(feature = "check-version")]
             ensure_version_is_latest(&path)?;
+
             let message = submit_matches.value_of("message").unwrap();
             submit_problem(&path, message)
         }
         Some(("test", test_matches)) => {
             let path: PathBuf = test_matches.value_of("path").unwrap().into();
+
+            #[cfg(feature = "check-version")]
             ensure_version_is_latest(&path)?;
+
             let repository = Repository::from_path(&path)?;
             let problem = repository.problem_from_path(&path)?;
             let report = ReportType::from_name(test_matches.value_of("report-to").unwrap())?;
