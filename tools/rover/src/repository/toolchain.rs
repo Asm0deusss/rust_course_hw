@@ -21,7 +21,7 @@ const FORBID_COLLECTIONS_PATTERNS: [&str; 8] = [
 
 fn filtered_env() -> HashMap<String, String> {
     std::env::vars().filter(|&(ref k, _)|
-        k == "PATH" || k == "CARGO" || k.starts_with("CARGO_") ||
+        k == "TERM" || k == "PATH" || k == "CARGO" || k.starts_with("CARGO_") ||
         k.starts_with("RUST_") || k.starts_with("RUSTUP_")
     ).collect()
 }
@@ -139,6 +139,8 @@ impl Toolchain {
                     .arg("test")
                     .arg("--features")
                     .arg("compilation-fail-generic")
+                    .env_clear()
+                    .envs(filtered_env())
                     .status()
                     .context("command failed")?
                     .success()
@@ -150,6 +152,8 @@ impl Toolchain {
                     .arg("test")
                     .arg("--features")
                     .arg("compilation-fail-labelled")
+                    .env_clear()
+                    .envs(filtered_env())
                     .status()
                     .context("command failed")?
                     .success()
@@ -161,6 +165,8 @@ impl Toolchain {
                     .arg("test")
                     .arg("--features")
                     .arg("compilation-fail-transmogrify")
+                    .env_clear()
+                    .envs(filtered_env())
                     .status()
                     .context("command failed")?
                     .success()
@@ -177,6 +183,8 @@ impl Toolchain {
                     .arg("test")
                     .arg("--features")
                     .arg("test-lifetimes-create")
+                    .env_clear()
+                    .envs(filtered_env())
                     .status()
                     .context("command failed")?
                     .success()
@@ -188,6 +196,8 @@ impl Toolchain {
                     .arg("test")
                     .arg("--features")
                     .arg("test-lifetimes-get")
+                    .env_clear()
+                    .envs(filtered_env())
                     .status()
                     .context("command failed")?
                     .success()
@@ -204,6 +214,8 @@ impl Toolchain {
                     .arg("test")
                     .arg("--features")
                     .arg("test-lifetime")
+                    .env_clear()
+                    .envs(filtered_env())
                     .status()
                     .context("command failed")?
                     .success()
