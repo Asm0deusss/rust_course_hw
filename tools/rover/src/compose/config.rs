@@ -8,12 +8,17 @@ use std::{
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "kebab-case")]
 pub struct Config {
+    #[serde(default)]
     problems: Vec<PathBuf>,
+    #[serde(default)]
     tools: Vec<PathBuf>,
-    #[serde(with = "tuple_vec_map")]
+    #[serde(with = "tuple_vec_map", default)]
     copy: Vec<(PathBuf, PathBuf)>,
+    #[serde(default)]
     skip_entries: Vec<PathBuf>,
+    #[serde(default)]
     add_to_toml: Vec<PathBuf>,
+    #[serde(default)]
     do_not_delete: Vec<PathBuf>,
 }
 
