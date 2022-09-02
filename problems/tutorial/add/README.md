@@ -1,11 +1,9 @@
 # A + B
 
-First, make sure you're finished [setting up your workspace](../../../docs/SETUP.md).
+Это пробная задача для проверки окружения и тестирующей системы, а также для знакомства с процессом выполнения домашних заданий.
+Перед началом выполнения настройте окружение [по инструкции](../../../README.md), находящейся в корне репозитория.
 
-## Task
+## Задача
 
-In the file `src/lib.rs`, implement a function `add` that adds two integers.
-
-## Friendly reminder
-
-Tests to the problems are always located in the `tests/tests.rs` file. It's better to read them _before_ coding and asking questions.
+Реализуйте функцию `add` для сложения двух знаковых 32-битных чисел с насыщением ("saturating addition", см. тесты [tests/tests.rs](./tests/tests.rs)).
+Сигнатура функции уже объявлена в файле [src/lib.rs](./src/lib.rs), Вам нужно лишь дописать код в теле функции.

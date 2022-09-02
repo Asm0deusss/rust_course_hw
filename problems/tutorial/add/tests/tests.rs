@@ -14,4 +14,5 @@ fn it_works() {
 #[test]
 fn saturating_add() {
     assert_eq!(i32::MAX, add(i32::MAX, 1));
+    assert_eq!(i32::MIN, add(i32::MIN, -1));
 }
