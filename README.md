@@ -29,7 +29,7 @@
 1. Склонируйте репозиторий с задачами.
 
    ```sh
-   git clone https://gitlab.com/rust-hse-tasks/rust-hse.git
+   git clone git@gitlab.com:rust-hse-tasks/rust-hse.git
    ```
 
    Команда `git clone` создаст директорию `rust-hse` и запишет туда все файлы из этого репозитория.
