@@ -1,6 +1,6 @@
 [package]
 name = "rover"
-version = "0.3.0"
+version = "0.3.1"
 authors = [
     "Alexander Stanovoy <alex.stanovoy@gmail.com>",
     "Dmitrii Zakharov <dimaz1301@gmail.com>",

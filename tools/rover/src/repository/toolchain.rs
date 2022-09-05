@@ -21,6 +21,7 @@ const FORBID_COLLECTIONS_PATTERNS: [&str; 8] = [
 
 fn filtered_env() -> HashMap<String, String> {
     std::env::vars().filter(|&(ref k, _)|
+        k == "TMP" || k == "TEMP" || k == "USERPROFILE" ||
         k == "TERM" || k == "PATH" || k == "CARGO" || k.starts_with("CARGO_") ||
         k.starts_with("RUST_") || k.starts_with("RUSTUP_")
     ).collect()
@@ -46,6 +47,7 @@ macro_rules! launch {
         while let Some(arg) = iter.next() {
             cmd.arg(arg);
         }
+        println!("Executing [{cmd:?}] in dir {:?}", cmd.get_current_dir());
         if cmd.status().context("command failed")?.success() {
             Ok(())
         } else {
@@ -74,8 +76,8 @@ impl Toolchain {
     pub fn get_shell_line(&self) -> Result<String> {
         Ok(match self {
             Self::Empty => "".to_string(),
-            Self::Stable => "rustup run stable".to_string(),
-            Self::Nightly => "rustup run nightly".to_string(),
+            Self::Stable => "rustup run --install stable".to_string(),
+            Self::Nightly => "rustup run --install nightly".to_string(),
         })
     }
 

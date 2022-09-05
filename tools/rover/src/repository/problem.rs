@@ -54,7 +54,9 @@ impl Problem {
         let toolchain = config.get_toolchain();
         let context = config.get_command_context();
         for step in config.get_steps() {
+            println!("-> Step {}", step.name());
             for command in step.commands() {
+                println!("--> Run {command:?} (toolchain {toolchain:?})");
                 toolchain.run_command(command, &context)?;
             }
         }

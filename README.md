@@ -67,7 +67,9 @@
 	git remote add student $ADDRESS
 	```
 
-   `$ADDRESS` нужно скопировать со страницы репозитория. Синяя кнопка Clone -> Clone with SSH.
+   `$ADDRESS` нужно скопировать со страницы репозитория.
+   Синяя кнопка Clone -> Clone with SSH.
+   Адрес должен быть вида `git@gitlab.com:rust-hse-fall-2022/<your gitlab username>.git`
 
 ### Настройка IDE
 
