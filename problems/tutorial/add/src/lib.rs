@@ -6,7 +6,7 @@ pub fn add(x: i32, y: i32) -> i32 {
     let ans = x_copy + y_copy;
     let int_mx: i64 = i32::MAX as i64;
     let int_mn: i64 = i32::MIN as i64;
-    
+
     if ans > int_mx {
         i32::MAX
     } else if ans < int_mn {
