@@ -8,3 +8,4 @@ steps:
     - cargo-clippy
   testing:
     - cargo-test
+    - cargo-test-debug
