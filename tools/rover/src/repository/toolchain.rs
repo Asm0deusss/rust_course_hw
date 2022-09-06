@@ -20,11 +20,12 @@ const FORBID_COLLECTIONS_PATTERNS: [&str; 8] = [
 ];
 
 fn filtered_env() -> HashMap<String, String> {
-    std::env::vars().filter(|&(ref k, _)|
-        k == "TMP" || k == "TEMP" || k == "USERPROFILE" ||
+    std::env::vars().filter(|&(ref k, ref v)|{
+        k == "TMP" || k == "TEMP" || k == "USERPROFILE" || k == "Path" ||
+        k == "INCLUDE" || k == "LIB" || k == "LIBPATH" ||
         k == "TERM" || k == "PATH" || k == "CARGO" || k.starts_with("CARGO_") ||
         k.starts_with("RUST_") || k.starts_with("RUSTUP_")
-    ).collect()
+    }).collect()
 }
 
 macro_rules! launch {
