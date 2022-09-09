@@ -1,6 +1,6 @@
-use std::path::{PathBuf, Path};
+use std::path::{Path, PathBuf};
 
-use anyhow::{anyhow, Result, bail, Context};
+use anyhow::{anyhow, bail, Context, Result};
 use cargo_toml::Manifest;
 use colored::Colorize;
 use indoc::formatdoc;
@@ -12,8 +12,7 @@ const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 const ROVER_RELATIVE_PATH: &'static str = "tools/rover";
 
 fn parse_version(version: &str) -> Result<Version> {
-    Version::from(version.as_ref())
-        .ok_or(anyhow!("Coult not parse version {version}"))
+    Version::from(version.as_ref()).ok_or(anyhow!("Coult not parse version {version}"))
 }
 
 fn get_version_in_repo(repo: &Repository) -> Result<String> {
@@ -21,8 +20,10 @@ fn get_version_in_repo(repo: &Repository) -> Result<String> {
         .get_path()
         .join(PathBuf::from(ROVER_RELATIVE_PATH))
         .join("Cargo.toml");
-    let manifest = Manifest::from_path(&toml_path)
-        .context(format!("Could not parse rover's Cargo.toml by path {}", toml_path.display()))?;
+    let manifest = Manifest::from_path(&toml_path).context(format!(
+        "Could not parse rover's Cargo.toml by path {}",
+        toml_path.display()
+    ))?;
 
     Ok(manifest
         .package
@@ -37,8 +38,7 @@ pub fn ensure_version_is_latest(path: &Path) -> Result<()> {
     let current_version = parse_version(VERSION)?;
 
     if current_version < latest_version {
-        let rover_path = repo.get_path()
-            .join(ROVER_RELATIVE_PATH);
+        let rover_path = repo.get_path().join(ROVER_RELATIVE_PATH);
         bail!(formatdoc! {"
             New version of rover is available: {version_change}.
             Please install `{install_cmd}`",

@@ -1,9 +1,12 @@
 use super::{command::Command, context::CommandContext};
 use anyhow::{bail, Context, Result};
+use colored::Colorize;
+use itertools::Itertools;
 use std::{
+    collections::HashMap,
     fs::File,
     io::{BufRead, BufReader},
-    process, collections::HashMap,
+    process,
 };
 
 const FORBID_UNSAFE_LINE: &str = "#![forbid(unsafe_code)]";
@@ -20,12 +23,23 @@ const FORBID_COLLECTIONS_PATTERNS: [&str; 8] = [
 ];
 
 fn filtered_env() -> HashMap<String, String> {
-    std::env::vars().filter(|&(ref k, ref v)|{
-        k == "TMP" || k == "TEMP" || k == "USERPROFILE" || k == "Path" ||
-        k == "INCLUDE" || k == "LIB" || k == "LIBPATH" ||
-        k == "TERM" || k == "PATH" || k == "CARGO" || k.starts_with("CARGO_") ||
-        k.starts_with("RUST_") || k.starts_with("RUSTUP_")
-    }).collect()
+    std::env::vars()
+        .filter(|&(ref k, ref _v)| {
+            k == "TMP"
+                || k == "TEMP"
+                || k == "USERPROFILE"
+                || k == "Path"
+                || k == "INCLUDE"
+                || k == "LIB"
+                || k == "LIBPATH"
+                || k == "TERM"
+                || k == "PATH"
+                || k == "CARGO"
+                || k.starts_with("CARGO_")
+                || k.starts_with("RUST_")
+                || k.starts_with("RUSTUP_")
+        })
+        .collect()
 }
 
 macro_rules! launch {
@@ -37,8 +51,7 @@ macro_rules! launch {
         let mut iter = toolchain_shell_iter.chain(command_shell_iter);
         let mut cmd = if let Some(program) = iter.next() {
             let mut cmd = process::Command::new(program);
-            cmd
-                .current_dir($context.get_workdir())
+            cmd.current_dir($context.get_workdir())
                 .env_clear()
                 .envs(filtered_env());
             cmd
@@ -48,11 +61,23 @@ macro_rules! launch {
         while let Some(arg) = iter.next() {
             cmd.arg(arg);
         }
-        println!("Executing [{cmd:?}] in dir {:?}", cmd.get_current_dir());
-        if cmd.status().context("command failed")?.success() {
+
+        println!(
+            "{:>12} `{program} {args}`{dir}",
+            "Executing".cyan().bold(),
+            program = cmd.get_program().to_string_lossy(),
+            args = cmd.get_args().map(|arg| arg.to_string_lossy()).join(" "),
+            dir = if let Some(dir) = cmd.get_current_dir() {
+                format!(" ({})", dir.to_string_lossy())
+            } else {
+                "".to_string()
+            },
+        );
+        let exit_status = cmd.status().context("Failed to execute command")?;
+        if exit_status.success() {
             Ok(())
         } else {
-            bail!("command failed")
+            bail!($command.get_failure_error(exit_status))
         }
     }};
 }

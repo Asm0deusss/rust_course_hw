@@ -1,4 +1,7 @@
-use anyhow::{bail, Result};
+use std::process::ExitStatus;
+
+use anyhow::{anyhow, bail, Result};
+use colored::Colorize;
 
 #[derive(Debug)]
 pub enum Command {
@@ -50,5 +53,19 @@ impl Command {
             Self::CargoCompileTestSnapshot => bail!("no shell line for CargoCompileTestSnapshot"),
             Self::PythonTest => "python3 test.py".to_string(),
         })
+    }
+
+    pub fn get_failure_error(&self, _status: ExitStatus) -> anyhow::Error {
+        match self {
+            Self::CargoFmt => anyhow!(
+                "Format your code as suggested above, \
+                 or run `{}` to do it automatically",
+                "cargo fmt".bold(),
+            ),
+            _ => anyhow!(
+                "Command {} failed, see message above",
+                format!("{self:?}").bold()
+            ),
+        }
     }
 }

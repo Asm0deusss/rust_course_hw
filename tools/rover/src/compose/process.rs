@@ -3,9 +3,7 @@ use anyhow::Result;
 use std::path::{Path, PathBuf};
 
 pub fn process(input: &Path, output: &Path, config: &Config) -> Result<()> {
-    let duplicate = |path: PathBuf| -> (PathBuf, PathBuf) {
-        (path.clone(), path)
-    };
+    let duplicate = |path: PathBuf| -> (PathBuf, PathBuf) { (path.clone(), path) };
     let to_process = std::iter::empty()
         .chain(
             config

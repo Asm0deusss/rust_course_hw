@@ -21,6 +21,10 @@
 Удобно.
 - [Rustlings](https://github.com/rust-lang/rustlings) - интерактивное изучение Rust по упражнениям. Задания супер легкие и быстрые.
 
+## Блоги
+
+- [fasterthanli.me](https://fasterthanli.me/tags/rust) - много заметок-статей про Rust, в том числе обучающих. Можно найти хорошие overview-tours для начинающих.
+
 ## YouTube каналы и видео
 
 - [Канал Jon Gjengset](https://www.youtube.com/c/JonGjengset/featured) - отличные видео для погружения в Rust.

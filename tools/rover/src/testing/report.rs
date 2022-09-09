@@ -1,6 +1,6 @@
 use anyhow::{bail, Context, Result};
 use reqwest::blocking::{multipart::Form, Client};
-use std::{env, thread, time, io::Read};
+use std::{env, io::Read, thread, time};
 
 const MANYTASK_URL: &str = "https://rust-hse.ru/api/report";
 const MANYTASK_RETRIES: usize = 3;

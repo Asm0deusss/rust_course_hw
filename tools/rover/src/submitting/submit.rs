@@ -2,19 +2,13 @@ use crate::{launch_git, repository::repo::Repository};
 use anyhow::{bail, Result};
 use colored::Colorize;
 use indoc::printdoc;
-use std::{
-    path::Path,
-    process,
-};
+use std::{path::Path, process};
 
 const MANYTASK_URL: &str = "https://раст-хсе.рф/";
 const SCOREBOARD_URL: &str = "https://раст-хсе.рф/scoreboard";
 const PIPELINES_URL: &str = "https://раст-хсе.рф/repo/pipelines";
 
-pub fn submit_problem(
-    problem_path: &Path,
-    message: &str,
-) -> Result<()> {
+pub fn submit_problem(problem_path: &Path, message: &str) -> Result<()> {
     let repo = Repository::from_path(problem_path)?;
     let problem = repo.problem_from_path(problem_path)?;
     let repo_path = repo.get_path();

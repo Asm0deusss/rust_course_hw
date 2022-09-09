@@ -2,6 +2,7 @@ use super::config::Config;
 use super::repo::PROBLEMS_FOLDER;
 use crate::{launch_git, repository::copying::copy_files};
 use anyhow::{bail, Result};
+use colored::Colorize;
 use std::{
     path::{Path, PathBuf},
     process,
@@ -54,9 +55,12 @@ impl Problem {
         let toolchain = config.get_toolchain();
         let context = config.get_command_context();
         for step in config.get_steps() {
-            println!("-> Step {}", step.name());
+            println!("{:>12} {}", "Step".green().bold(), step.name());
             for command in step.commands() {
-                println!("--> Run {command:?} (toolchain {toolchain:?})");
+                println!(
+                    "{:>12} {command:?} (toolchain {toolchain:?})",
+                    "Running cmd".green().bold()
+                );
                 toolchain.run_command(command, &context)?;
             }
         }

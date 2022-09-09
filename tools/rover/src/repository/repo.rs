@@ -17,9 +17,11 @@ impl Repository {
             .canonicalize()
             .context("cannot canonicalize path for repository")?;
         let comps = canon_path.components().collect::<Vec<_>>();
-        let prefix_count = comps
-            .into_iter()
-            .rposition(|comp| REPOSITORY_NAMES.iter().any(|name| *name == comp.as_os_str()));
+        let prefix_count = comps.into_iter().rposition(|comp| {
+            REPOSITORY_NAMES
+                .iter()
+                .any(|name| *name == comp.as_os_str())
+        });
         if let Some(pos) = prefix_count {
             Ok(Self {
                 path: canon_path.iter().take(pos + 1).collect(),

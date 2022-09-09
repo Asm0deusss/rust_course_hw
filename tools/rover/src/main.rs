@@ -1,8 +1,14 @@
 use anyhow::Result;
 use clap::{Arg, Command};
+use colored::Colorize;
 use compose::run_compose::run_compose;
 use repository::repo::Repository;
-use std::path::PathBuf;
+use std::io::Write;
+use std::{
+    io,
+    path::PathBuf,
+    process::{ExitCode, Termination},
+};
 use submitting::submit::submit_problem;
 use testing::{report::ReportType, test::test_problem};
 
@@ -15,7 +21,29 @@ mod submitting;
 mod testing;
 mod util;
 
-fn main() -> Result<()> {
+struct NiceMainResult(Result<()>);
+
+impl From<Result<()>> for NiceMainResult {
+    fn from(res: Result<()>) -> Self {
+        Self(res)
+    }
+}
+
+impl Termination for NiceMainResult {
+    fn report(self) -> std::process::ExitCode {
+        match self.0 {
+            Ok(val) => val.report(),
+            Err(err) => {
+                // Ignore error if the write fails, for example because stderr is
+                // already closed. There is not much point panicking at this point.
+                let _ = writeln!(io::stderr(), "{}: {err:?}", "Error".red().bold());
+                ExitCode::FAILURE
+            }
+        }
+    }
+}
+
+fn run_rover() -> Result<()> {
     let matches = Command::new("rover")
         .about("Helper tool for the Rust language course")
         .subcommand(
@@ -134,4 +162,8 @@ fn main() -> Result<()> {
         }
         _ => unreachable!(),
     }
+}
+
+fn main() -> NiceMainResult {
+    run_rover().into()
 }
