@@ -6,6 +6,9 @@ enum TokenKind {
     Private,
     BeginPrivate,
     EndPrivate,
+    Uncomment,
+    BeginUncomment,
+    EndUncomment,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -36,6 +39,12 @@ fn parse_token(line: &str) -> Result<Option<Token>> {
         TokenKind::BeginPrivate
     } else if cmd.starts_with("end_private") {
         TokenKind::EndPrivate
+    } else if cmd.starts_with("uncomment") {
+        TokenKind::Uncomment
+    } else if cmd.starts_with("begin_uncomment") {
+        TokenKind::BeginUncomment
+    } else if cmd.starts_with("end_uncomment") {
+        TokenKind::EndUncomment
     } else {
         bail!("unknown compose command: {}", cmd);
     };
@@ -81,7 +90,7 @@ fn process_source(src: String) -> Result<String> {
     while let Some((begin, token)) = find_token(&lines, next_pos)? {
         let end = match token.kind {
             TokenKind::EndPrivate => bail!("unpaired 'end_private' on line {}", begin + 1),
-            TokenKind::Private => begin + 1,
+            TokenKind::Private => begin + 2,
             TokenKind::BeginPrivate => {
                 let mut pos = begin + 1;
                 let mut mb_end: Option<usize> = None;
@@ -95,11 +104,39 @@ fn process_source(src: String) -> Result<String> {
                             mb_end = Some(k);
                             break;
                         }
+                        TokenKind::BeginUncomment | TokenKind::Uncomment | TokenKind::EndUncomment => {
+                            bail!("nested uncomment-type token on line {}", k + 1);
+                        }
                     }
                 }
                 match mb_end {
                     Some(end) => end + 1,
                     None => bail!("unclosed 'begin_private' on line {}", begin + 1),
+                }
+            }
+            TokenKind::Uncomment => begin + 2,
+            TokenKind::EndUncomment => bail!("unpaired 'end_uncomment' on line {}", begin + 1),
+            TokenKind::BeginUncomment => {
+                let mut pos = begin + 1;
+                let mut mb_end: Option<usize> = None;
+                while let Some((k, token)) = find_token(&lines, pos)? {
+                    match token.kind {
+                        TokenKind::BeginUncomment => {
+                            bail!("nested 'begin_uncomment' on line {}", k + 1)
+                        }
+                        TokenKind::Uncomment => pos = k + 1,
+                        TokenKind::EndUncomment => {
+                            mb_end = Some(k);
+                            break;
+                        }
+                        TokenKind::BeginPrivate | TokenKind::Private | TokenKind::EndPrivate => {
+                            bail!("nested 'private'-type token on line {}", k + 1)
+                        }
+                    }
+                }
+                match mb_end {
+                    Some(end) => end + 1,
+                    None => bail!("unclosed 'begin_uncomment' on line {}", begin + 1),
                 }
             }
         };
@@ -110,33 +147,48 @@ fn process_source(src: String) -> Result<String> {
             dst += "\n";
         }
 
-        let no_hint = token.properties.contains(&TokenProperty::NoHint);
-        let unimpl = token.properties.contains(&TokenProperty::Unimplemented);
-        if no_hint {
-            if begin > 0
-                && lines[begin - 1].trim().is_empty()
-                && end < lines.len()
-                && lines[end].trim().is_empty()
-            {
-                next_pos = end + 1;
+        if matches!(token.kind, TokenKind::BeginPrivate | TokenKind::Private) {
+            let no_hint = token.properties.contains(&TokenProperty::NoHint);
+            let unimpl = token.properties.contains(&TokenProperty::Unimplemented);
+            if no_hint {
+                if begin > 0
+                    && lines[begin - 1].trim().is_empty()
+                    && end < lines.len()
+                    && lines[end].trim().is_empty()
+                {
+                    next_pos = end + 1;
+                } else {
+                    next_pos = end;
+                }
             } else {
+                let mut insert_line = |line: &str| {
+                    for c in lines[begin].chars() {
+                        if c.is_whitespace() {
+                            dst.push(c);
+                        } else {
+                            break;
+                        }
+                    }
+                    dst.push_str(line);
+                };
+
+                insert_line("// TODO: your code goes here.\n");
+                if unimpl {
+                    insert_line("unimplemented!()\n");
+                }
+
                 next_pos = end;
             }
-        } else {
-            let mut insert_line = |line: &str| {
-                for c in lines[begin].chars() {
-                    if c.is_whitespace() {
-                        dst.push(c);
-                    } else {
-                        break;
-                    }
-                }
-                dst.push_str(line);
-            };
-
-            insert_line("// TODO: your code goes here.\n");
-            if unimpl {
-                insert_line("unimplemented!()\n");
+        } else if matches!(token.kind, TokenKind::BeginUncomment | TokenKind::Uncomment) {
+            let has_end_uncomment = matches!(token.kind, TokenKind::BeginUncomment) as usize;
+            for i in begin + 1..end - has_end_uncomment {
+                let line = lines[i];
+                let (indent, content) = line
+                    .split_once("// ")
+                    .context(format!("No comment found in uncomment block on line {}", i + 1))?;
+                dst.push_str(indent);
+                dst.push_str(content);
+                dst.push_str("\n");
             }
 
             next_pos = end;
