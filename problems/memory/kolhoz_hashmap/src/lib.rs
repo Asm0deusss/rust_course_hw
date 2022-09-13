@@ -256,19 +256,16 @@ mod tests {
             assert_eq!(
                 result,
                 vec![
-                    (
-                        &Key::new(b"6"),
-                        vec![&Data::new(b"VI"), &Data::new(b"six"),]
-                    ),
+                    (&Key::new(b"6"), vec![&Data::new(b"VI"), &Data::new(b"six")]),
                     (&Key::new(b"ten"), vec![]),
                     (&Key::new(b""), vec![]),
                     (
                         &Key::new(b"3"),
-                        vec![&Data::new(b"III"), &Data::new(b"three"),]
+                        vec![&Data::new(b"III"), &Data::new(b"three")]
                     ),
                     (
                         &Key::new(b"one"),
-                        vec![&Data::new(b"ber"), &Data::new(b"odin"), &Data::new(b"uno"),]
+                        vec![&Data::new(b"ber"), &Data::new(b"odin"), &Data::new(b"uno")]
                     ),
                 ]
             );
@@ -277,11 +274,11 @@ mod tests {
             assert_eq!(
                 result_data,
                 vec![
-                    vec![&Data::new(b"VI"), &Data::new(b"six"),],
+                    vec![&Data::new(b"VI"), &Data::new(b"six")],
                     vec![],
                     vec![],
-                    vec![&Data::new(b"III"), &Data::new(b"three"),],
-                    vec![&Data::new(b"ber"), &Data::new(b"odin"), &Data::new(b"uno"),],
+                    vec![&Data::new(b"III"), &Data::new(b"three")],
+                    vec![&Data::new(b"ber"), &Data::new(b"odin"), &Data::new(b"uno")],
                 ]
             );
         }
@@ -333,7 +330,7 @@ mod tests {
         keys.sort();
         assert_eq!(
             keys,
-            vec![&Key::new(b"2"), &Key::new(b"dva"), &Key::new(b"ike"),]
+            vec![&Key::new(b"2"), &Key::new(b"dva"), &Key::new(b"ike")]
         );
     }
 
@@ -378,7 +375,7 @@ mod tests {
                     (Key::new(b"5"), Data::new(b"five")),
                     (Key::new(b"6"), Data::new(b"VI")),
                 ],
-                vec![(Key::new(b"1"), Data::new(b"one")),],
+                vec![(Key::new(b"1"), Data::new(b"one"))],
             ]
         );
 
@@ -399,7 +396,7 @@ mod tests {
                     (Key::new(b"5"), Data::new(b"five")),
                     (Key::new(b"6"), Data::new(b"VI")),
                 ],
-                vec![(Key::new(b"1"), Data::new(b"one")),],
+                vec![(Key::new(b"1"), Data::new(b"one"))],
             ]
         );
     }
@@ -437,91 +434,99 @@ mod tests {
                     (Key::new(b"5"), Data::new(b"five")),
                     (Key::new(b"6"), Data::new(b"VI")),
                 ],
-                vec![(Key::new(b"1"), Data::new(b"one")),],
+                vec![(Key::new(b"1"), Data::new(b"one"))],
             ]
         );
 
         resize(&mut table, 4);
+        normalize(&mut table);
         assert_eq!(
             table,
             vec![
                 vec![
-                    (Key::new(b"5"), Data::new(b"five")),
-                    (Key::new(b"5"), Data::new(b"V")),
                     (Key::new(b"1"), Data::new(b"one")),
+                    (Key::new(b"5"), Data::new(b"V")),
+                    (Key::new(b"5"), Data::new(b"five")),
                 ],
-                vec![(Key::new(b"6"), Data::new(b"VI")),],
+                vec![(Key::new(b"6"), Data::new(b"VI"))],
                 vec![],
                 vec![
                     (Key::new(b"2"), Data::new(b"two")),
-                    (Key::new(b"4"), Data::new(b"four")),
                     (Key::new(b"3"), Data::new(b"III")),
                     (Key::new(b"3"), Data::new(b"three")),
                     (Key::new(b"3"), Data::new(b"three")),
+                    (Key::new(b"4"), Data::new(b"four")),
                 ],
             ]
         );
 
         resize(&mut table, 11);
+        normalize(&mut table);
         assert_eq!(
             table,
             vec![
                 vec![],
-                vec![(Key::new(b"4"), Data::new(b"four")),],
+                vec![(Key::new(b"4"), Data::new(b"four"))],
                 vec![
-                    (Key::new(b"5"), Data::new(b"five")),
                     (Key::new(b"5"), Data::new(b"V")),
+                    (Key::new(b"5"), Data::new(b"five")),
                 ],
                 vec![],
                 vec![],
-                vec![(Key::new(b"6"), Data::new(b"VI")),],
-                vec![(Key::new(b"1"), Data::new(b"one")),],
-                vec![(Key::new(b"2"), Data::new(b"two")),],
+                vec![(Key::new(b"6"), Data::new(b"VI"))],
+                vec![(Key::new(b"1"), Data::new(b"one"))],
+                vec![(Key::new(b"2"), Data::new(b"two"))],
                 vec![],
                 vec![
-                    (Key::new(b"3"), Data::new(b"three")),
-                    (Key::new(b"3"), Data::new(b"three")),
                     (Key::new(b"3"), Data::new(b"III")),
+                    (Key::new(b"3"), Data::new(b"three")),
+                    (Key::new(b"3"), Data::new(b"three")),
                 ],
                 vec![],
             ]
         );
 
+        resize(&mut table, 100);
+        resize(&mut table, 2);
+        resize(&mut table, 11);
+
         resize(&mut table, 5);
+        normalize(&mut table);
         assert_eq!(
             table,
             vec![
-                vec![(Key::new(b"6"), Data::new(b"VI")),],
-                vec![(Key::new(b"4"), Data::new(b"four")),],
+                vec![(Key::new(b"6"), Data::new(b"VI"))],
+                vec![(Key::new(b"4"), Data::new(b"four"))],
                 vec![],
                 vec![
-                    (Key::new(b"3"), Data::new(b"three")),
                     (Key::new(b"3"), Data::new(b"III")),
+                    (Key::new(b"3"), Data::new(b"three")),
                     (Key::new(b"3"), Data::new(b"three")),
                 ],
                 vec![
-                    (Key::new(b"5"), Data::new(b"five")),
-                    (Key::new(b"5"), Data::new(b"V")),
                     (Key::new(b"1"), Data::new(b"one")),
                     (Key::new(b"2"), Data::new(b"two")),
+                    (Key::new(b"5"), Data::new(b"V")),
+                    (Key::new(b"5"), Data::new(b"five")),
                 ],
             ]
         );
 
         resize(&mut table, 1);
+        normalize(&mut table);
         assert_eq!(
             table,
             vec![vec![
-                (Key::new(b"6"), Data::new(b"VI")),
-                (Key::new(b"4"), Data::new(b"four")),
-                (Key::new(b"3"), Data::new(b"three")),
-                (Key::new(b"3"), Data::new(b"three")),
-                (Key::new(b"3"), Data::new(b"III")),
-                (Key::new(b"5"), Data::new(b"five")),
-                (Key::new(b"2"), Data::new(b"two")),
                 (Key::new(b"1"), Data::new(b"one")),
+                (Key::new(b"2"), Data::new(b"two")),
+                (Key::new(b"3"), Data::new(b"III")),
+                (Key::new(b"3"), Data::new(b"three")),
+                (Key::new(b"3"), Data::new(b"three")),
+                (Key::new(b"4"), Data::new(b"four")),
                 (Key::new(b"5"), Data::new(b"V")),
-            ],]
+                (Key::new(b"5"), Data::new(b"five")),
+                (Key::new(b"6"), Data::new(b"VI")),
+            ]]
         );
 
         resize(&mut table, 0);
