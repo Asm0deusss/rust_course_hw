@@ -15,7 +15,7 @@ pub fn flatten<const N: usize>(data: Vec<Box<[&mut i32; N]>>) -> Vec<&mut i32> {
     ans_vec
 }
 
-pub fn transform_to_fixed_arr<const N: usize>(data: &mut Vec<Vec<i32>>) -> Vec<Box<[&mut i32; N]>> {
+pub fn transform_to_fixed_arr<const N: usize>(data: &mut [Vec<i32>]) -> Vec<Box<[&mut i32; N]>> {
     for val in data.iter() {
         if val.len() != N {
             panic!("Inner vectors are of different size");
