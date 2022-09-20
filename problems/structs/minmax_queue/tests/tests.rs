@@ -73,12 +73,12 @@ fn test_push() {
 fn test_large() {
     let mut queue = MinMaxQueue::new();
 
-    for i in 0..100000000 {
+    for i in 0..1000000 {
         queue.push(i);
         assert_eq!(Some(i), queue.max());
     }
 
-    for i in 0..100000000 {
+    for i in 0..1000000 {
         assert_eq!(Some(i), queue.min());
         queue.pop();
     }
