@@ -15,7 +15,7 @@ pub fn submit_problem(problem_path: &Path, message: &str) -> Result<()> {
     if !launch_git!(repo_path, "add", problem.relative_path()) {
         bail!("git add failed");
     }
-    if !launch_git!(repo_path, "commit", "-m", message) {
+    if !launch_git!(repo_path, "commit", "-m", message, "--allow-empty") {
         bail!("git commit failed: either no changes since the last commit or git failed")
     }
     if !launch_git!(
