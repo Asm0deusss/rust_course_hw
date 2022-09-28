@@ -2,43 +2,44 @@
 
 #[derive(Default)]
 pub struct MinMaxQueue {
-    // your data here
+    // TODO: your code goes here.
 }
 
 impl MinMaxQueue {
     pub fn new() -> Self {
-        // your implementation here
+        // TODO: your code goes here.
     }
 
     pub fn push(&mut self, value: i32) {
-        // your implementation here
+        // TODO: your code goes here.
     }
 
     pub fn pop(&mut self) -> Option<i32> {
-        // your implementation here
+        // TODO: your code goes here.
     }
 
     pub fn first(&self) -> Option<i32> {
-        // your implementation here
+        // TODO: your code goes here.
     }
 
     pub fn last(&self) -> Option<i32> {
-        // your implementation here
+        // TODO: your code goes here.
     }
 
     pub fn min(&self) -> Option<i32> {
-        // your implementation here
+        // TODO: your code goes here.
     }
 
     pub fn max(&self) -> Option<i32> {
-        // your implementation here
+        // TODO: your code goes here.
     }
 
     pub fn len(&self) -> usize {
-        // your implementation here
+        // TODO: your code goes here.
     }
 
     pub fn is_empty(&self) -> bool {
-        // your implementation here
+        // TODO: your code goes here.
     }
+
 }

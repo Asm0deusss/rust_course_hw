@@ -1,3 +1,5 @@
+#![forbid(unsafe_code)]
+
 // TODO: your code goes here.
 unimplemented!()
 struct FlipCoinConfig {

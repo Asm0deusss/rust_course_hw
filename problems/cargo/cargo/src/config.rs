@@ -1,6 +1,5 @@
 #![forbid(unsafe_code)]
 
-
 use crate::games::{flip_coin::game::FlipCoinGame, roll_dice::game::RollDiceGame};
 
 // TODO: your code goes here.
