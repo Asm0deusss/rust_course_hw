@@ -91,7 +91,10 @@ where
         self.tree.remove(cur_key_priority.unwrap());
         self.tree.insert(self.cur_priority, key.clone());
 
-        let upd_priority = self.priority.entry(&key).and_modify(|x| * x = self.cur_priority);
+        let _upd_priority = self
+            .priority
+            .entry(key)
+            .and_modify(|x| *x = self.cur_priority);
         self.cur_priority += 1;
     }
 }
