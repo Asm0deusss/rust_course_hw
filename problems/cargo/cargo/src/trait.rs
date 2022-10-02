@@ -8,7 +8,7 @@ trait UnfairRound {
     fn play(&mut self) -> u8;
 }
 
-trait Round: FairRound + UnfairRound {
+trait Round: FairRound + UnfairRound {}
 impl<T> Round for T where T: FairRound + UnfairRound {}
 
 trait InitGame<GameConfig> {
