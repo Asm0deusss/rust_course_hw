@@ -21,6 +21,7 @@ fn check_test(test_name: &str, test_data: &serde_json::Value) {
         });
     }
     let game_winners = play_games(&input_data_vec);
+    assert_eq!(game_winners.len(), output_data_vec.len());
     for (test_line, (&winner_opt, &real_winner)) in
         game_winners.iter().zip(output_data_vec.iter()).enumerate()
     {
