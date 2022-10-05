@@ -73,11 +73,15 @@ macro_rules! launch {
                 "".to_string()
             },
         );
-        let exit_status = cmd.status().context("Failed to execute command")?;
-        if exit_status.success() {
+        let mut child = cmd
+            .stdout(process::Stdio::piped())
+            .spawn()
+            .context("Failed to execute command")?;
+        let cmd_status = $command.wait(&mut child)?;
+        if cmd_status.success() {
             Ok(())
         } else {
-            bail!($command.get_failure_error(exit_status))
+            bail!($command.get_failure_error(cmd_status))
         }
     }};
 }

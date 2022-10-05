@@ -104,7 +104,9 @@ fn process_source(src: String) -> Result<String> {
                             mb_end = Some(k);
                             break;
                         }
-                        TokenKind::BeginUncomment | TokenKind::Uncomment | TokenKind::EndUncomment => {
+                        TokenKind::BeginUncomment
+                        | TokenKind::Uncomment
+                        | TokenKind::EndUncomment => {
                             bail!("nested uncomment-type token on line {}", k + 1);
                         }
                     }
@@ -183,9 +185,10 @@ fn process_source(src: String) -> Result<String> {
             let has_end_uncomment = matches!(token.kind, TokenKind::BeginUncomment) as usize;
             for i in begin + 1..end - has_end_uncomment {
                 let line = lines[i];
-                let (indent, content) = line
-                    .split_once("// ")
-                    .context(format!("No comment found in uncomment block on line {}", i + 1))?;
+                let (indent, content) = line.split_once("// ").context(format!(
+                    "No comment found in uncomment block on line {}",
+                    i + 1
+                ))?;
                 dst.push_str(indent);
                 dst.push_str(content);
                 dst.push_str("\n");
