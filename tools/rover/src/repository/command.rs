@@ -1,4 +1,4 @@
-use std::process::ExitStatus;
+use std::process::{ExitStatus, Stdio};
 
 use anyhow::{anyhow, bail, Context, Result};
 use colored::Colorize;
@@ -68,6 +68,13 @@ impl Command {
             Self::CargoCompileTestSnapshot => bail!("no shell line for CargoCompileTestSnapshot"),
             Self::PythonTest => "python3 test.py".to_string(),
         })
+    }
+
+    pub fn cmd_stdout(&self) -> Stdio {
+        match self {
+            Self::CargoTest | Self::CargoTestDebug => Stdio::piped(),
+            _ => Stdio::inherit(),
+        }
     }
 
     pub fn wait(&self, process: &mut std::process::Child) -> Result<CommandStatus> {

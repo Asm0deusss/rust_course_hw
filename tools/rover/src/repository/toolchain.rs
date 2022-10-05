@@ -74,7 +74,7 @@ macro_rules! launch {
             },
         );
         let mut child = cmd
-            .stdout(process::Stdio::piped())
+            .stdout($command.cmd_stdout())
             .spawn()
             .context("Failed to execute command")?;
         let cmd_status = $command.wait(&mut child)?;
