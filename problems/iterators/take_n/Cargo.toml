@@ -1,0 +1,5 @@
+[package]
+name = "take_n"
+version = "0.1.0"
+authors = ["Evgenii Kazakov"]
+edition = "2021"

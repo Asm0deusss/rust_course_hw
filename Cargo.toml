@@ -15,6 +15,7 @@ members = [
     "problems/cargo/cargo",
     "problems/iterators/div3",
     "problems/iterators/add2",
+    "problems/iterators/take_n",
 
     # Tools
     "tools/rover",
