@@ -1,0 +1,5 @@
+[package]
+name = "add2"
+version = "0.1.0"
+authors = ["Evgenii Kazakov"]
+edition = "2021"

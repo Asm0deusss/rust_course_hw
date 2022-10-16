@@ -14,6 +14,7 @@ members = [
     "problems/structs/minmax_queue",
     "problems/cargo/cargo",
     "problems/iterators/div3",
+    "problems/iterators/add2",
 
     # Tools
     "tools/rover",
