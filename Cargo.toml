@@ -13,12 +13,15 @@ members = [
     "problems/structs/trust",
     "problems/structs/minmax_queue",
     "problems/cargo/cargo",
-    "problems/iterators/div3",
     "problems/iterators/add2",
+    "problems/iterators/div3",
+    "problems/iterators/flatten2",
     "problems/iterators/take_n",
+    "problems/iterators/split",
 
     # Tools
     "tools/rover",
+    "tools/vcs_tester",
 
     # Additional
     "",
