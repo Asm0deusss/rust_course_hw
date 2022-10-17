@@ -19,7 +19,6 @@ impl<InIter, F, OutIter> Iterator for FlatMap<InIter, F, OutIter>
     }
 }
 
-
 pub fn flat_map<InputIterator, Mapping, OutputIterator>(
     iter: InputIterator,
     f: Mapping,

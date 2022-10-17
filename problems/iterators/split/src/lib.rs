@@ -8,8 +8,8 @@ pub struct SplitString {
 
 impl SplitString {
     pub fn new(input: &str, delimiter: &str) -> Self {
-    // TODO: your code goes here.
-    unimplemented!()
+        // TODO: your code goes here.
+        unimplemented!()
     }
 }
 
