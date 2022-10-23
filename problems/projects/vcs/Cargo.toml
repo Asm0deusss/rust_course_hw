@@ -12,3 +12,7 @@ sha1 = "*"
 hex = "*"
 deflate = "*"
 inflate = "*"
+walkdir = "*"
+clap = { version = "4.0.18", features = ["derive"] }
+chrono = "*"
+num-traits = "*"

@@ -1,33 +1,32 @@
 #![forbid(unsafe_code)]
 
-use std::path::{Path};
+use std::path::Path;
 
-use crate::{ErrorType, repo_file_manager::{find_dir, get_link, get_file_content}, Links, vcs_file_manager::{make_tree, make_commit}, file_factory::{write_to_file, write_to_hash_file}};
+use crate::{
+    file_factory::{write_to_file, write_to_hash_file},
+    repo_file_manager::{find_repository_root, get_file_content, get_link},
+    vcs_file_manager::{make_commit, make_tree},
+    ErrorType, Links,
+};
 
-pub fn commit (message: String) -> Result<(), ErrorType>{
-    let cur_dir = std::fs::canonicalize("./").unwrap();
-    let vcs_path = find_dir(Path::new(&cur_dir), ".vcs".to_owned())?;
+pub fn commit(message: &str) -> Result<String, ErrorType> {
+    let cur_dir = std::fs::canonicalize(".").unwrap();
+    let vcs_path = find_repository_root(Path::new(&cur_dir))?;
     let work_dir = vcs_path.parent().unwrap();
-    let cur_head = get_link(Links::Head, work_dir.to_path_buf()).unwrap();
-    let last_master_commit = get_link(Links::Master, work_dir.to_path_buf()).unwrap();
-    let cur_head_hash = get_file_content(cur_head.clone())?;
+    let cur_head = get_link(Links::Head, work_dir).unwrap();
+    let last_master_commit = get_link(Links::Master, work_dir).unwrap();
+    let cur_head_hash = get_file_content(&cur_head)?;
 
     let mut is_last_commit = false;
     let mut last_branch = last_master_commit.clone();
 
-    let mut heads_path = vcs_path.clone();
-    heads_path.push("refs");
-    heads_path.push("heads");
+    let heads_path = vcs_path.join("refs").join("heads").to_path_buf();
 
-    let tmp_paths = std::fs::read_dir(heads_path);
-    if tmp_paths.is_err() {
-        return Err(ErrorType::NoSuchDir);
-    }
-    let paths = tmp_paths.unwrap();
+    let paths = std::fs::read_dir(heads_path)?;
 
     for cur_path in paths {
         let cur_branch = cur_path.unwrap();
-        let cur_branch_hash = get_file_content(cur_branch.path())?;
+        let cur_branch_hash = get_file_content(&cur_branch.path())?;
 
         if cur_branch_hash == cur_head_hash {
             last_branch = cur_branch.path();
@@ -42,15 +41,13 @@ pub fn commit (message: String) -> Result<(), ErrorType>{
 
     let cur_tree = make_tree(vcs_path.clone(), work_dir.to_path_buf()).unwrap();
 
-    let parent = get_file_content(last_branch.clone()).unwrap();
-    let (hash, encoded) = make_commit(&parent, &cur_tree, &message)?;
+    let parent = get_file_content(&last_branch).unwrap();
+    let (hash, encoded) = make_commit(&parent, &cur_tree, message)?;
 
-    write_to_file(&cur_head, &hash.as_bytes().to_vec());
-    write_to_file(&last_branch, &hash.as_bytes().to_vec());
+    write_to_file(&cur_head, &hash.as_bytes().to_vec())?;
+    write_to_file(&last_branch, &hash.as_bytes().to_vec())?;
 
-    write_to_hash_file(&vcs_path, &hash, &encoded);
+    write_to_hash_file(&vcs_path, &hash, &encoded)?;
 
-    println!("COMMIT: {} with message {}", hash, message);
-
-    Ok(())
+    Ok(hash)
 }
