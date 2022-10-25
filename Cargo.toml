@@ -21,7 +21,6 @@ members = [
 
     # Tools
     "tools/rover",
-    "tools/vcs_tester",
 
     # Additional
     "",
