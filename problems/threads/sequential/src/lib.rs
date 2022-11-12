@@ -58,7 +58,7 @@ pub fn sequential_run<Printer, Iter>(
             let mut cur_iterator = mutex_it_1.lock().unwrap();
             let next = cur_iterator.next();
 
-            if next.is_some() {
+            if let Some(..) = next {
                 printer_1(&thread::current(), next.unwrap());
                 *cur_iter_index += 1;
             } else {
@@ -94,7 +94,7 @@ pub fn sequential_run<Printer, Iter>(
             let mut cur_iterator = mutex_it_2.lock().unwrap();
             let next = cur_iterator.next();
 
-            if next.is_some() {
+            if let Some(..) = next {
                 printer_2(&thread::current(), next.unwrap());
                 *cur_iter_index += 1;
             } else {
@@ -105,6 +105,6 @@ pub fn sequential_run<Printer, Iter>(
         })
         .unwrap();
 
-    odd_thread.join();
-    even_thread.join();
+    odd_thread.join().unwrap();
+    even_thread.join().unwrap();
 }
