@@ -1,0 +1,11 @@
+[package]
+name = "roshambo"
+version = "0.1.0"
+authors = ["Dmitrii Zakharov <dimaz1301@gmail.com>"]
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.0.25", features = ["derive"] }
+log = "0.4.17"
+rand = "0.8.5"
+simplelog = "0.12.0"
