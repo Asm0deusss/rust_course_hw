@@ -9,11 +9,7 @@ use std::str::{self, FromStr};
 use std::thread;
 use std::time::{self, Duration};
 
-const BINARY_PATH: &str = if cfg!(debug_assertions) {
-    "../../target/debug/chat"
-} else {
-    "../../target/release/chat"
-};
+const BINARY_PATH: &str = env!("CARGO_BIN_EXE_chat");
 
 const SOH: u8 = 1;
 
@@ -40,6 +36,7 @@ impl ServerWrapper {
             IpVersion::V6 => IpAddr::from_str("::1").unwrap(),
         };
 
+        eprintln!("binary path {}", BINARY_PATH);
         let proc = Command::new(BINARY_PATH)
             .arg("--ip")
             .arg(ip.to_string())

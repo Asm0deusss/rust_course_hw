@@ -6,11 +6,7 @@ use std::str::{self, FromStr};
 use std::thread;
 use std::time;
 
-const BINARY_PATH: &str = if cfg!(debug_assertions) {
-    "../../target/debug/roshambo"
-} else {
-    "../../target/release/roshambo"
-};
+const BINARY_PATH: &str = env!("CARGO_BIN_EXE_roshambo");
 
 enum IpVersion {
     V4,
