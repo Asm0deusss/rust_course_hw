@@ -168,7 +168,7 @@ fn test_login() {
 
 #[test]
 fn test_non_utf8() {
-    let server = ServerWrapper::start(IpVersion::V6);
+    let server = ServerWrapper::start(IpVersion::V4);
 
     let mut alice = Client::start(server.addr).unwrap();
     alice.login(&[2, 3, 4, 5, 228]).unwrap();
@@ -214,7 +214,7 @@ fn test_message_to_each_other() {
 
 #[test]
 fn test_message_to_nowhere() {
-    let server = ServerWrapper::start(IpVersion::V6);
+    let server = ServerWrapper::start(IpVersion::V4);
 
     let mut alice = Client::start(server.addr).unwrap();
     alice.login(b"Alice").unwrap();
@@ -247,7 +247,7 @@ fn test_cant_message_myself() {
 
 #[test]
 fn test_relogin() {
-    let server = ServerWrapper::start(IpVersion::V6);
+    let server = ServerWrapper::start(IpVersion::V4);
 
     let mut alice = Client::start(server.addr).unwrap();
     alice.login(b"Alice").unwrap();
@@ -338,7 +338,7 @@ fn test_two_talkers() {
 
 #[test]
 fn test_cut_in_mid_sente() {
-    let server = ServerWrapper::start(IpVersion::V6);
+    let server = ServerWrapper::start(IpVersion::V4);
 
     let mut alice = Client::start(server.addr).unwrap();
     alice.login(b"Alice").unwrap();

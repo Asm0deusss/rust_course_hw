@@ -129,7 +129,7 @@ fn test_rounds() {
 
 #[test]
 fn test_client_closing_write_connection() {
-    let mut server = ServerWrapper::start(IpVersion::V6);
+    let mut server = ServerWrapper::start(IpVersion::V4);
 
     let mut player_a = Player::start(server.addr).unwrap();
     let mut player_b = Player::start(server.addr).unwrap();
@@ -173,7 +173,7 @@ fn test_client_closing_read_connection() {
 
 #[test]
 fn test_invalid_messages() {
-    let mut server = ServerWrapper::start(IpVersion::V6);
+    let mut server = ServerWrapper::start(IpVersion::V4);
 
     let mut player_a = Player::start(server.addr).unwrap();
     let mut player_b = Player::start(server.addr).unwrap();
@@ -188,7 +188,7 @@ fn test_invalid_messages() {
 
 #[test]
 fn test_max_two_connections_accepted() {
-    let server = ServerWrapper::start(IpVersion::V6);
+    let server = ServerWrapper::start(IpVersion::V4);
 
     let _player_a = Player::start(server.addr).unwrap();
     let _player_b = Player::start(server.addr).unwrap();
