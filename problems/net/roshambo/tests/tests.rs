@@ -149,7 +149,7 @@ fn test_client_closing_write_connection() {
 }
 
 #[test]
-fn test_client_closing_read_connection() {
+fn test_client_closing_both_connection() {
     let mut server = ServerWrapper::start(IpVersion::V4);
 
     let mut player_a = Player::start(server.addr).unwrap();
@@ -160,10 +160,8 @@ fn test_client_closing_read_connection() {
     assert_eq!(player_a.read(2).unwrap(), b"SW");
     assert_eq!(player_b.read(2).unwrap(), b"RL");
 
-    player_a.shutdown(Shutdown::Read);
-    player_b.shutdown(Shutdown::Read);
-    player_a.write(b"R").unwrap();
-    player_b.write(b"S").unwrap();
+    player_a.shutdown(Shutdown::Both);
+    player_b.shutdown(Shutdown::Both);
 
     // server unable to send messages to clients
     thread::sleep(time::Duration::from_millis(1000));
