@@ -35,10 +35,10 @@ pub fn run(ip: IpAddr, port: u16) {
     let mut second_player = &clients[&2];
 
     first_player
-        .set_read_timeout(Some(Duration::from_millis(1000)))
+        .set_read_timeout(Some(Duration::from_millis(10000)))
         .unwrap();
     second_player
-        .set_read_timeout(Some(Duration::from_millis(1000)))
+        .set_read_timeout(Some(Duration::from_millis(10000)))
         .unwrap();
 
     loop {
