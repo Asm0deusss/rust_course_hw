@@ -99,7 +99,6 @@ pub fn run(ip: IpAddr, port: u16) {
         }
 
         if is_bad {
-            println!("Something bad happend");
             return;
         }
 
