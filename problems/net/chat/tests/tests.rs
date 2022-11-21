@@ -164,6 +164,8 @@ fn test_login() {
 
     let mut carol = Client::start(server.addr).unwrap();
     carol.login(b"Carol").unwrap();
+
+    take_a_nap()
 }
 
 #[test]
