@@ -1,21 +1,36 @@
 #![forbid(unsafe_code)]
 
-pub struct FlatMap<InIter, F, OutIter> {
+pub struct FlatMap<InIter, F, OutIter>
+where
+    InIter: Iterator,
+    F: FnMut(InIter::Item) -> OutIter,
+    OutIter: IntoIterator,
+{
+    iter: std::iter::FlatMap<InIter, OutIter, F>,
 }
 
-impl<InIter, F, OutIter> FlatMap<InIter, F, OutIter> {
+impl<InIter, F, OutIter> FlatMap<InIter, F, OutIter>
+where
+    InIter: Iterator,
+    F: FnMut(InIter::Item) -> OutIter,
+    OutIter: IntoIterator,
+{
     fn new(outer: InIter, function: F) -> Self {
-        // TODO: your code goes here.
-        unimplemented!()
+        Self {
+            iter: (outer.flat_map(function)),
+        }
     }
 }
 
 impl<InIter, F, OutIter> Iterator for FlatMap<InIter, F, OutIter>
+where
+    InIter: Iterator,
+    F: FnMut(InIter::Item) -> OutIter,
+    OutIter: IntoIterator,
 {
-    type Item = todo!();
+    type Item = <OutIter>::Item;
     fn next(&mut self) -> Option<Self::Item> {
-        // TODO: your code goes here.
-        unimplemented!()
+        self.iter.next()
     }
 }
 
@@ -23,7 +38,10 @@ pub fn flat_map<InputIterator, Mapping, OutputIterator>(
     iter: InputIterator,
     f: Mapping,
 ) -> FlatMap<InputIterator, Mapping, OutputIterator>
+where
+    InputIterator: Iterator,
+    Mapping: FnMut(InputIterator::Item) -> OutputIterator,
+    OutputIterator: IntoIterator,
 {
-    // TODO: your code goes here.
-    unimplemented!()
+    FlatMap::new(iter, f)
 }
